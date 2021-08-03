@@ -29,7 +29,7 @@ void main() async {
 
   group("complete", () {
     late final id;
-    final String model = "res.users";
+    final String tableName = "res.users";
     final Map<String, dynamic> args = {"login": "tester", "name": "tester"};
 
     test('connect', () async {
@@ -38,34 +38,34 @@ void main() async {
     });
 
     test('create', () async {
-      id = await odoo.insert(model, args);
+      id = await odoo.insert(tableName, args);
       print("created id : $id");
       expect(id, isNonNegative);
     });
 
     test('read', () async {
-      final res = await odoo.read(model, id);
+      final res = await odoo.read(tableName, id);
       expect(res, isNotNull);
     });
 
     test('read - certain fields', () async {
       bool isSuccess = false;
-      final res = await odoo.read(model, id, ["id"]);
+      final res = await odoo.read(tableName, id, ["id"]);
       // print(res);
       isSuccess = res!["id"] == id;
       expect(isSuccess, isTrue);
     });
 
     test('update', () async {
-      final res = await odoo.update(model, id, args);
+      final res = await odoo.update(tableName, id, args);
       expect(res, isTrue);
     });
 
     test('delete', () async {
       bool isSuccess = false;
-      final res = await odoo.delete(model, id);
+      final res = await odoo.delete(tableName, id);
       if (res == true) {
-        isSuccess = await odoo.read(model, id) == null;
+        isSuccess = await odoo.read(tableName, id) == null;
       }
       expect(isSuccess, isTrue);
     });
@@ -73,7 +73,7 @@ void main() async {
     test('disconnect', () async {
       odoo.disconnect();
       try {
-        await odoo.insert(model, args);
+        await odoo.insert(tableName, args);
       } catch (err) {
         expect(err.toString(), contains("Session expired"));
       }

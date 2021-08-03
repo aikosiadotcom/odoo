@@ -58,8 +58,10 @@ await odoo.read(tableName,id);
 
 Before publish to pub.dev, make sure you run following command:
 
+```
 #generate model file
 flutter pub run build_runner build 
 
 #testing
 flutter test 
+```

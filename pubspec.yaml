@@ -1,7 +1,8 @@
 name: odoo
 description: odoo api
 version: 0.0.1
-homepage:
+homepage: "https://aikosia.com"
+repository: "https://github.com/aikosiadotcom/odoo"
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -12,12 +13,12 @@ dependencies:
     sdk: flutter
   dio: ^4.0.0
   uuid: ^3.0.4
+  json_annotation: ^4.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   json_serializable: 
-  json_annotation: 
   build_runner: ^2.0.6
 
 # For information on the generic Dart part of this file, see the

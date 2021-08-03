@@ -10,8 +10,30 @@ odoo api using endpoint /web/dataset/call_kw
 import 'package:odoo/odoo.dart';
 final odoo = Odoo(Connection(url: Url(Protocol.http, "localhost", 8069), db: 'odoo'));
 ```
+## Connection Operation
 
-## insert
+### Connect
+
+```
+UserLoggedIn user = await odoo.connect(Credential("admin", "admin"));
+```
+
+### Disconnect
+
+```
+await odoo.disconnect();
+```
+
+### Session Change
+```
+odoo.session.stream.listen((Session? session) {
+    print('session changed ${session?.toJson()}');
+});
+```
+
+## Database Operation
+
+### Insert
 
 ```
 String tableName = "res.users";
@@ -19,7 +41,7 @@ Map<String,dynamic> args = {"login":"tester",name:"tester"};
 await odoo.insert(tableName, args);
 ```
 
-## update
+### Update
 
 ```
 String tableName = "res.users";
@@ -28,7 +50,7 @@ Map<String,dynamic> args = {"login":"tester",name:"tester"};
 await odoo.update(tableName, id, args);
 ```
 
-## delete
+### Delete
 
 ```
 String tableName = "res.users";
@@ -36,7 +58,7 @@ int id = 999;
 await odoo.delete(tableName, id);
 ```
 
-## query
+### Query
 
 ```
 String from = "res.users";
@@ -46,7 +68,7 @@ String orderBy = "login ASC";
 await odoo.query(from: from, select: select, where: where, orderBy: orderBy, limit: 10, offset: 0);
 ```
 
-## read
+### Read
 
 ```
 String tableName = "res.users";

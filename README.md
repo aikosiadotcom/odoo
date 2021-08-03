@@ -4,7 +4,7 @@ odoo api using endpoint /web/dataset/call_kw
 
 # Usage
 
-## initialize
+## Initialize
 
 ```
 import 'package:odoo/odoo.dart';

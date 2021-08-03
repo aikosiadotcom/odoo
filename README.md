@@ -87,3 +87,5 @@ flutter pub run build_runner build
 #testing
 flutter test 
 ```
+
+and dont forget to uncomment #Generate File at .gitignore

@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:yao_core/yao_core.dart';
+
 import 'model/connection.dart';
 import 'model/credential.dart';
 import 'model/user_logged_in.dart';
@@ -49,12 +51,13 @@ class SessionController {
   }
 }
 
-class Odoo implements IDatabaseOperation, IConnection {
+class YaoOdooService extends YaoService
+    implements IDatabaseOperation, IConnection {
   final Connection connection;
   late final Dio _dio;
   late final SessionController session;
 
-  Odoo(this.connection) {
+  YaoOdooService(this.connection) {
     this._dio = Dio(BaseOptions(baseUrl: connection.url.toString()));
     this.session = SessionController(_dio);
   }
@@ -213,5 +216,10 @@ class Odoo implements IDatabaseOperation, IConnection {
 
   void disconnect() {
     session.update(null);
+  }
+
+  @override
+  Future<YaoOdooService> run() async {
+    return this;
   }
 }

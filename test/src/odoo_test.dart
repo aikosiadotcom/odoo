@@ -1,13 +1,13 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:odoo/odoo.dart';
+import 'package:yao_odoo_service/odoo.dart';
 
-Future<UserLoggedIn> connect(Odoo odoo) async {
+Future<UserLoggedIn> connect(YaoOdooService odoo) async {
   return await odoo.connect(Credential("admin", "admin"));
 }
 
 void main() async {
-  final odoo =
-      Odoo(Connection(url: Url(Protocol.http, "localhost", 8069), db: 'odoo'));
+  final odoo = YaoOdooService(
+      Connection(url: Url(Protocol.http, "localhost", 8069), db: 'odoo'));
   odoo.session.stream.listen((event) {
     print('session changed ${event?.toJson()}');
   });

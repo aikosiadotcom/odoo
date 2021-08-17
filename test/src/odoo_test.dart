@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:yao_odoo_service/odoo.dart';
+import 'package:yao_odoo_service/yao_odoo_service.dart';
 
 Future<UserLoggedIn> connect(YaoOdooService odoo) async {
   return await odoo.connect(Credential("admin", "admin"));
@@ -7,25 +7,25 @@ Future<UserLoggedIn> connect(YaoOdooService odoo) async {
 
 void main() async {
   final odoo = YaoOdooService(
-      Connection(url: Url(Protocol.http, "localhost", 8069), db: 'odoo'));
+      Connection(url: Url(Protocol.http, "localhost", 8069), db: 'test_01'));
   odoo.session.stream.listen((event) {
     print('session changed ${event?.toJson()}');
   });
 
-  test("query", () async {
-    await connect(odoo);
-    final tmp = await odoo.query(
-        from: "res.users",
-        select: ["id", "name"],
-        where: [
-          "|",
-          ["id", "=", 7],
-          ["id", "=", 6]
-        ],
-        orderBy: "id desc",
-        limit: 10);
-    print(tmp);
-  });
+  // test("query", () async {
+  //   await connect(odoo);
+  //   final tmp = await odoo.query(
+  //       from: "res.users",
+  //       select: ["id", "name"],
+  //       where: [
+  //         "|",
+  //         ["id", "=", 7],
+  //         ["id", "=", 6]
+  //       ],
+  //       orderBy: "id desc",
+  //       limit: 10);
+  //   print(tmp);
+  // });
 
   group("complete", () {
     late final id;
@@ -70,13 +70,13 @@ void main() async {
       expect(isSuccess, isTrue);
     });
 
-    test('disconnect', () async {
-      odoo.disconnect();
-      try {
-        await odoo.insert(tableName, args);
-      } catch (err) {
-        expect(err.toString(), contains("Session expired"));
-      }
-    });
+    // test('disconnect', () async {
+    //   odoo.disconnect();
+    //   try {
+    //     await odoo.insert(tableName, args);
+    //   } catch (err) {
+    //     expect(err.toString(), contains("Session expired"));
+    //   }
+    // });
   });
 }

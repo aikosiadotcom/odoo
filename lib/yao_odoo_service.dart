@@ -1,4 +1,4 @@
-library odoo;
+library yao_odoo_service;
 
 export 'src/model/connection.dart';
 export 'src/model/credential.dart';

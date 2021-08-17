@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
+import 'package:universal_io/io.dart';
 import 'package:yao_core/yao_core.dart';
 
 import 'model/connection.dart';
@@ -42,12 +42,23 @@ class SessionController {
   final Dio _dio;
   final _controller = StreamController<Session?>();
   Stream<Session?> get stream => _controller.stream;
+  String? get id => _id;
+  bool get isNull => !_authenticated;
+  String? _id;
+  bool _authenticated = false;
 
   SessionController(this._dio);
 
   void update(Session? session) {
     _dio.options.headers["Cookie"] = "session_id=${session?.id}";
     _controller.add(session);
+    if (session != null) {
+      _id = session.id;
+      _authenticated = true;
+    } else {
+      _id = null;
+      _authenticated = false;
+    }
   }
 }
 
@@ -70,9 +81,12 @@ class YaoOdooService extends YaoService
             "login": credential.username,
             "password": credential.password
           }));
-
       Map<String, dynamic> _resp = _transformResponse(resp);
 
+      if (resp.headers['set-cookie'] == null) {
+        throw Exception(
+            "header 'set-cookie' tidak ditemukan. Saat ini tidak bisa running di web, karena https://github.com/flutterchina/dio/issues/1027");
+      }
       String sessionId = _getSessionId(resp.headers['set-cookie']!.first);
       UserLoggedIn _user = UserLoggedIn.fromJson(_resp);
 
@@ -80,6 +94,10 @@ class YaoOdooService extends YaoService
 
       return UserLoggedIn.fromJson(_resp);
     } catch (e) {
+      if (e is DioError) {
+        throw Exception(this._transformDioError(e));
+      }
+
       throw e;
     }
   }
@@ -108,6 +126,10 @@ class YaoOdooService extends YaoService
 
       return _transformResponse(resp);
     } catch (e) {
+      if (e is DioError) {
+        throw Exception(this._transformDioError(e));
+      }
+
       throw e;
     }
   }
@@ -216,6 +238,10 @@ class YaoOdooService extends YaoService
 
   void disconnect() {
     session.update(null);
+  }
+
+  String _transformDioError(DioError e) {
+    return e.message;
   }
 
   @override

@@ -75,4 +75,4 @@ build/
 !**/ios/**/default.perspectivev3
 
 # Generated File
-*.g.dart
+# *.g.dart

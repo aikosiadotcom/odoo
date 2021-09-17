@@ -25,8 +25,9 @@ class Url {
 class Connection {
   final Url url;
   final String db;
+  final int timeout; //milliseconds
 
-  Connection({required this.url, required this.db});
+  Connection({required this.url, required this.db, this.timeout = 30 * 1000});
 
   factory Connection.fromJson(Map<String, dynamic> json) =>
       _$ConnectionFromJson(json);

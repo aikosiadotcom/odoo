@@ -12,7 +12,21 @@ import 'package:uuid/uuid.dart';
 
 import 'model/session.dart';
 
-enum _OdooMethod { create, read, update, delete }
+// enum OdooCallKwMethod { create, read, update, delete }
+
+class OdooCallKwMethod {
+  static String create = "create";
+  static String read = "read";
+  static String update = "write";
+  static String delete = "unlink";
+  static String confirm = "action_confirm";
+  static String validate = "button_validate";
+}
+
+class OdooCallKwModel {
+  static String so = "sale.order";
+  static String sit = "stock.immediate.transfer";
+}
 
 const _uuid = Uuid();
 
@@ -69,7 +83,11 @@ class YaoOdooService extends YaoService
   late final SessionController session;
 
   YaoOdooService(this.connection) {
-    this._dio = Dio(BaseOptions(baseUrl: connection.url.toString()));
+    this._dio = Dio(BaseOptions(
+        baseUrl: connection.url.toString(),
+        connectTimeout: connection.timeout,
+        sendTimeout: connection.timeout,
+        receiveTimeout: connection.timeout));
     this.session = SessionController(_dio);
   }
 
@@ -102,26 +120,37 @@ class YaoOdooService extends YaoService
     }
   }
 
-  Future<dynamic> _crud(String tableName, _OdooMethod method, dynamic args,
-      [dynamic kwargs]) async {
+  Future<dynamic> call(
+      String callMethod, String model, String method, dynamic args,
+      [dynamic kwargs = const {"context": {}}]) async {
     try {
-      String _method = "";
-      if (method == _OdooMethod.delete) {
-        _method = "unlink";
-      } else if (method == _OdooMethod.update) {
-        _method = "write";
-      } else if (method == _OdooMethod.create) {
-        _method = "create";
-      } else if (method == _OdooMethod.read) {
-        _method = "read";
+      Response resp = await _dio.post("/web/dataset/${callMethod}",
+          data: _withDefaultParams({
+            "args": args,
+            "kwargs": kwargs,
+            "method": method,
+            "model": model
+          }));
+
+      return _transformResponse(resp);
+    } catch (e) {
+      if (e is DioError) {
+        throw Exception(this._transformDioError(e));
       }
 
+      throw e;
+    }
+  }
+
+  Future<dynamic> callKw(String model, String method, dynamic args,
+      [dynamic kwargs = const {"context": {}}]) async {
+    try {
       Response resp = await _dio.post("/web/dataset/call_kw",
           data: _withDefaultParams({
             "args": args,
-            "kwargs": {"context": {}},
-            "method": _method,
-            "model": tableName
+            "kwargs": kwargs,
+            "method": method,
+            "model": model
           }));
 
       return _transformResponse(resp);
@@ -135,13 +164,13 @@ class YaoOdooService extends YaoService
   }
 
   Future<int> insert(String tableName, Map<String, dynamic> args) async {
-    int resp = await _crud(tableName, _OdooMethod.create, [args]);
+    int resp = await callKw(tableName, OdooCallKwMethod.create, [args]);
     return resp;
   }
 
   Future<Map<String, dynamic>?> read(String tableName, int id,
       [List<String> columns = const []]) async {
-    List resp = await _crud(tableName, _OdooMethod.read, [
+    List resp = await callKw(tableName, OdooCallKwMethod.read, [
       [id],
       columns
     ]) as List;
@@ -155,7 +184,7 @@ class YaoOdooService extends YaoService
 
   Future<bool> update(
       String tableName, int id, Map<String, dynamic> args) async {
-    bool resp = await _crud(tableName, _OdooMethod.update, [
+    bool resp = await callKw(tableName, OdooCallKwMethod.update, [
       [id],
       args
     ]);
@@ -164,7 +193,7 @@ class YaoOdooService extends YaoService
   }
 
   Future<bool> delete(String tableName, int id) async {
-    bool resp = await _crud(tableName, _OdooMethod.delete, [
+    bool resp = await callKw(tableName, OdooCallKwMethod.delete, [
       [id]
     ]);
 

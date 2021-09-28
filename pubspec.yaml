@@ -16,7 +16,9 @@ dependencies:
   universal_io: ^2.0.4
   uuid: ^3.0.4
   yao_core: 
-    path: ../yao_core
+    git:
+      url: git://github.com/aikosiadotcom/yao_core.git
+      ref: master
 
 dev_dependencies:
   build_runner: ^2.0.6

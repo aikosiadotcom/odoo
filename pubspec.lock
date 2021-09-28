@@ -502,9 +502,11 @@ packages:
   yao_core:
     dependency: "direct main"
     description:
-      path: "../yao_core"
-      relative: true
-    source: path
+      path: "."
+      ref: master
+      resolved-ref: "5293e1b15e4b6adbbf4e21c7116ed4388cb4d330"
+      url: "git://github.com/aikosiadotcom/yao_core.git"
+    source: git
     version: "0.0.2+26"
 sdks:
   dart: ">=2.13.0 <3.0.0"

@@ -112,11 +112,8 @@ class YaoOdooService extends YaoService
 
       return UserLoggedIn.fromJson(_resp);
     } catch (e) {
-      if (e is DioError) {
-        throw Exception(this._transformDioError(e));
-      }
-
-      throw e;
+      _transformError(e);
+      return UserLoggedIn.fromJson({});
     }
   }
 
@@ -134,11 +131,7 @@ class YaoOdooService extends YaoService
 
       return _transformResponse(resp);
     } catch (e) {
-      if (e is DioError) {
-        throw Exception(this._transformDioError(e));
-      }
-
-      throw e;
+      _transformError(e);
     }
   }
 
@@ -155,11 +148,7 @@ class YaoOdooService extends YaoService
 
       return _transformResponse(resp);
     } catch (e) {
-      if (e is DioError) {
-        throw Exception(this._transformDioError(e));
-      }
-
-      throw e;
+      _transformError(e);
     }
   }
 
@@ -208,19 +197,37 @@ class YaoOdooService extends YaoService
       int offset = 0,
       bool count = false,
       int limit = 50}) async {
-    final resp =
-        _transformResponseQuery(await _dio.post("/web/dataset/search_read",
-            data: _withDefaultParams({
-              "context": {},
-              "domain": where,
-              "fields": select,
-              "limit": limit,
-              "model": from,
-              "sort": orderBy,
-              "offset": offset,
-              "count": count
-            })));
-    return resp;
+    try {
+      final resp =
+          _transformResponseQuery(await _dio.post("/web/dataset/search_read",
+              data: _withDefaultParams({
+                "context": {},
+                "domain": where,
+                "fields": select,
+                "limit": limit,
+                "model": from,
+                "sort": orderBy,
+                "offset": offset,
+                "count": count
+              })));
+      return resp;
+    } catch (e) {
+      _transformError(e);
+      return [];
+    }
+  }
+
+  void _transformError(e) {
+    if (e is DioError) {
+      var tmp = this._transformDioError(e);
+      if (tmp.contains("404")) {
+        session.update(null);
+        throw Exception("Session expired");
+      }
+      throw Exception(tmp);
+    }
+
+    throw e;
   }
 
   List _transformResponseQuery(Response resp) {

@@ -116,9 +116,7 @@ class YaoOdooService extends YaoService
             "password": credential.password
           }));
       Map<String, dynamic> _resp = _transformResponse(resp);
-      resp.headers.forEach((name, values) {
-        print(name + " : " + values.toString());
-      });
+
       if (resp.headers['set-cookie'] == null) {
         throw Exception(
             "header 'set-cookie' tidak ditemukan. Saat ini tidak bisa running di web, karena https://github.com/flutterchina/dio/issues/1027");

@@ -86,25 +86,24 @@ class YaoOdooService extends YaoService
   late final SessionController session;
 
   YaoOdooService(this.connection) {
-    print(kIsWeb);
-    if (kIsWeb) {
-      this._dio = DioForBrowser(BaseOptions(
-          baseUrl: connection.url.toString(),
-          connectTimeout: connection.timeout,
-          sendTimeout: connection.timeout,
-          receiveTimeout: connection.timeout));
+    // if (kIsWeb) {
+    //   this._dio = DioForBrowser(BaseOptions(
+    //       baseUrl: connection.url.toString(),
+    //       connectTimeout: connection.timeout,
+    //       sendTimeout: connection.timeout,
+    //       receiveTimeout: connection.timeout));
 
-      BrowserHttpClientAdapter adapter = BrowserHttpClientAdapter();
-      // This property will automatically set cookies
-      adapter.withCredentials = true;
-      this._dio.httpClientAdapter = adapter;
-    } else {
-      this._dio = Dio(BaseOptions(
-          baseUrl: connection.url.toString(),
-          connectTimeout: connection.timeout,
-          sendTimeout: connection.timeout,
-          receiveTimeout: connection.timeout));
-    }
+    //   BrowserHttpClientAdapter adapter = BrowserHttpClientAdapter();
+    //   // This property will automatically set cookies
+    //   adapter.withCredentials = true;
+    //   this._dio.httpClientAdapter = adapter;
+    // } else {
+    this._dio = Dio(BaseOptions(
+        baseUrl: connection.url.toString(),
+        connectTimeout: connection.timeout,
+        sendTimeout: connection.timeout,
+        receiveTimeout: connection.timeout));
+    // }
     this.session = SessionController(_dio);
   }
 

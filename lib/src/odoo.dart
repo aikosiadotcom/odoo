@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:dio/adapter_browser.dart';
 import 'package:dio/browser_imp.dart';
 import 'package:universal_io/io.dart';
 import 'package:yao_core/yao_core.dart';
@@ -91,6 +92,11 @@ class YaoOdooService extends YaoService
           connectTimeout: connection.timeout,
           sendTimeout: connection.timeout,
           receiveTimeout: connection.timeout));
+
+      BrowserHttpClientAdapter adapter = BrowserHttpClientAdapter();
+      // This property will automatically set cookies
+      adapter.withCredentials = true;
+      this._dio.httpClientAdapter = adapter;
     } else {
       this._dio = Dio(BaseOptions(
           baseUrl: connection.url.toString(),

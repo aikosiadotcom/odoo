@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:dio/browser_imp.dart';
 import 'package:universal_io/io.dart';
 import 'package:yao_core/yao_core.dart';
 
@@ -11,6 +12,7 @@ import 'package:dio/dio.dart';
 import 'package:uuid/uuid.dart';
 
 import 'model/session.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 // enum OdooCallKwMethod { create, read, update, delete }
 
@@ -83,11 +85,19 @@ class YaoOdooService extends YaoService
   late final SessionController session;
 
   YaoOdooService(this.connection) {
-    this._dio = Dio(BaseOptions(
-        baseUrl: connection.url.toString(),
-        connectTimeout: connection.timeout,
-        sendTimeout: connection.timeout,
-        receiveTimeout: connection.timeout));
+    if (kIsWeb) {
+      this._dio = DioForBrowser(BaseOptions(
+          baseUrl: connection.url.toString(),
+          connectTimeout: connection.timeout,
+          sendTimeout: connection.timeout,
+          receiveTimeout: connection.timeout));
+    } else {
+      this._dio = Dio(BaseOptions(
+          baseUrl: connection.url.toString(),
+          connectTimeout: connection.timeout,
+          sendTimeout: connection.timeout,
+          receiveTimeout: connection.timeout));
+    }
     this.session = SessionController(_dio);
   }
 

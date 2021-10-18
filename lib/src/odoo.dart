@@ -86,6 +86,7 @@ class YaoOdooService extends YaoService
   late final SessionController session;
 
   YaoOdooService(this.connection) {
+    print(kIsWeb);
     if (kIsWeb) {
       this._dio = DioForBrowser(BaseOptions(
           baseUrl: connection.url.toString(),

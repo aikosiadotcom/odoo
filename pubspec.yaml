@@ -1,6 +1,6 @@
 name: yao_odoo_service
 description: odoo api using endpoint /web/dataset/call_kw
-version: 0.0.2+9
+version: 0.0.2+10
 homepage: "https://aikosia.com"
 repository: "https://github.com/aikosiadotcom/odoo"
 

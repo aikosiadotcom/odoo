@@ -135,7 +135,9 @@ class YaoOdooService extends YaoService
 
   Future<dynamic> call(
       String callMethod, String model, String method, dynamic args,
-      [dynamic kwargs = const {"context": {}}]) async {
+      [dynamic kwargs = const {
+        "context": {"tz": "Asia/Jakarta"}
+      }]) async {
     try {
       Response resp = await _dio.post("/web/dataset/${callMethod}",
           data: _withDefaultParams({
@@ -152,7 +154,9 @@ class YaoOdooService extends YaoService
   }
 
   Future<dynamic> callKw(String model, String method, dynamic args,
-      [dynamic kwargs = const {"context": {}}]) async {
+      [dynamic kwargs = const {
+        "context": {"tz": "Asia/Jakarta"}
+      }]) async {
     try {
       Response resp = await _dio.post("/web/dataset/call_kw",
           data: _withDefaultParams({
@@ -217,7 +221,7 @@ class YaoOdooService extends YaoService
       final resp =
           _transformResponseQuery(await _dio.post("/web/dataset/search_read",
               data: _withDefaultParams({
-                "context": {},
+                "context": {"tz": "Asia/Jakarta"},
                 "domain": where,
                 "fields": select,
                 "limit": limit,

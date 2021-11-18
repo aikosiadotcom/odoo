@@ -82,7 +82,7 @@ class SessionController {
 class YaoOdooService extends YaoService
     implements IDatabaseOperation, IConnection {
   final Connection connection;
-  late final Dio _dio;
+  late final Dio dio;
   late final SessionController session;
 
   YaoOdooService(this.connection) {
@@ -98,18 +98,18 @@ class YaoOdooService extends YaoService
     //   adapter.withCredentials = true;
     //   this._dio.httpClientAdapter = adapter;
     // } else {
-    this._dio = Dio(BaseOptions(
+    this.dio = Dio(BaseOptions(
         baseUrl: connection.url.toString(),
         connectTimeout: connection.timeout,
         sendTimeout: connection.timeout,
         receiveTimeout: connection.timeout));
     // }
-    this.session = SessionController(_dio);
+    this.session = SessionController(dio);
   }
 
   Future<UserLoggedIn> connect(Credential credential) async {
     try {
-      Response resp = await _dio.post("/web/session/authenticate",
+      Response resp = await dio.post("/web/session/authenticate",
           data: _withDefaultParams({
             "db": connection.db,
             "login": credential.username,
@@ -139,7 +139,7 @@ class YaoOdooService extends YaoService
         "context": {"tz": "Asia/Jakarta"}
       }]) async {
     try {
-      Response resp = await _dio.post("/web/dataset/${callMethod}",
+      Response resp = await dio.post("/web/dataset/${callMethod}",
           data: _withDefaultParams({
             "args": args,
             "kwargs": kwargs,
@@ -158,7 +158,7 @@ class YaoOdooService extends YaoService
         "context": {"tz": "Asia/Jakarta"}
       }]) async {
     try {
-      Response resp = await _dio.post("/web/dataset/call_kw",
+      Response resp = await dio.post("/web/dataset/call_kw",
           data: _withDefaultParams({
             "args": args,
             "kwargs": kwargs,
@@ -219,7 +219,7 @@ class YaoOdooService extends YaoService
       int limit = 50}) async {
     try {
       final resp =
-          _transformResponseQuery(await _dio.post("/web/dataset/search_read",
+          _transformResponseQuery(await dio.post("/web/dataset/search_read",
               data: _withDefaultParams({
                 "context": {"tz": "Asia/Jakarta"},
                 "domain": where,

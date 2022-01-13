@@ -5,6 +5,7 @@ import 'dart:convert';
 // import 'package:dio/browser_imp.dart';
 import 'package:universal_io/io.dart';
 import 'package:yao_core/yao_core.dart';
+import 'dart:developer' as developer;
 
 import 'model/connection.dart';
 import 'model/credential.dart';
@@ -122,6 +123,9 @@ class YaoOdooService extends YaoService
             "header 'set-cookie' tidak ditemukan. Saat ini tidak bisa running di web, karena https://github.com/flutterchina/dio/issues/1027");
       }
       String sessionId = _getSessionId(resp.headers['set-cookie']!.first);
+      
+      developer.debugger();
+      
       UserLoggedIn _user = UserLoggedIn.fromJson(_resp);
 
       session.update(Session(sessionId, _user));

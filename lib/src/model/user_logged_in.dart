@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'user_companies.dart';
 import 'user_context.dart';
 
 part 'user_logged_in.g.dart';
@@ -14,7 +13,6 @@ class UserLoggedIn {
   final String server_version;
   final String name;
   final String username;
-  final UserCompanies user_companies;
   final Map<String, dynamic> currencies;
 
   UserLoggedIn(
@@ -26,7 +24,6 @@ class UserLoggedIn {
       required this.server_version,
       required this.name,
       required this.username,
-      required this.user_companies,
       required this.currencies});
   factory UserLoggedIn.fromJson(Map<String, dynamic> json) =>
       _$UserLoggedInFromJson(json);

@@ -16,8 +16,6 @@ UserLoggedIn _$UserLoggedInFromJson(Map<String, dynamic> json) {
     server_version: json['server_version'] as String,
     name: json['name'] as String,
     username: json['username'] as String,
-    user_companies:
-        UserCompanies.fromJson(json['user_companies'] as Map<String, dynamic>),
     currencies: json['currencies'] as Map<String, dynamic>,
   );
 }
@@ -32,6 +30,5 @@ Map<String, dynamic> _$UserLoggedInToJson(UserLoggedIn instance) =>
       'server_version': instance.server_version,
       'name': instance.name,
       'username': instance.username,
-      'user_companies': instance.user_companies.toJson(),
       'currencies': instance.currencies,
     };

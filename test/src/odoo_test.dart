@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:yao_odoo_service/yao_odoo_service.dart';
+import 'package:mriv_odoo/mriv_odoo.dart';
 
 Future<UserLoggedIn> connect(YaoOdooService odoo) async {
   return await odoo.connect(Credential("admin", "admin"));

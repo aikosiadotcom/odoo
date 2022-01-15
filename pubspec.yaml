@@ -1,8 +1,8 @@
-name: yao_odoo_service
+name: mriv_odoo
 description: odoo api using endpoint /web/dataset/call_kw
 version: 0.0.2+11
 homepage: "https://aikosia.com"
-repository: "https://github.com/aikosiadotcom/odoo"
+repository: "https://github.com/MriV13/odoo"
 
 environment:
   sdk: ">=2.12.0 <3.0.0"

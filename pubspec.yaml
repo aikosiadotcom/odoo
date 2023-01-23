@@ -17,7 +17,7 @@ dependencies:
   uuid: ^3.0.4
   yao_core: 
     git:
-      url: git://github.com/aikosiadotcom/yao_core.git
+      url: https://github.com/aikosiadotcom/yao_core.git
       ref: master
 
 dev_dependencies:

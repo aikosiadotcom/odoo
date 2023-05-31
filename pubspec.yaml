@@ -18,7 +18,7 @@ dependencies:
   yao_core: 
     git:
       url: https://github.com/aikosiadotcom/yao_core.git
-      ref: master
+      ref: material3
 
 dev_dependencies:
   build_runner: ^2.0.6
